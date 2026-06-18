@@ -16,6 +16,7 @@
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-void: var(--void);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -38,6 +39,7 @@
 :root {
   --radius: 0.5rem;
   /* Dark monochrome tech palette — grayscale white/black */
+  --void: oklch(0 0 0);
   --background: oklch(0.13 0 0);
   --foreground: oklch(0.96 0 0);
   --card: oklch(0.17 0 0);
@@ -50,13 +52,13 @@
   --secondary-foreground: oklch(0.96 0 0);
   --muted: oklch(0.24 0 0);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.28 0 0);
-  --accent-foreground: oklch(0.96 0 0);
+  --accent: oklch(0.55 0.24 279);
+  --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.27 0 0);
   --input: oklch(0.27 0 0);
-  --ring: oklch(0.7 0 0);
+  --ring: var(--accent);
 }
 
 @layer base {
@@ -91,4 +93,26 @@
 
 @utility text-glow {
   text-shadow: 0 0 40px color-mix(in oklab, var(--color-foreground) 30%, transparent);
+}
+
+@layer utilities {
+  .aatman-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-accent) 45%, transparent) transparent;
+  }
+
+  .aatman-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .aatman-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .aatman-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--color-accent) 38%, transparent);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
 }

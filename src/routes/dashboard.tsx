@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/dashboard")({
 
 function DashboardPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -50,8 +52,10 @@ function DashboardPage() {
   }, [navigate]);
 
   const handleSignOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/" });
+    navigate({ to: "/auth", replace: true });
   };
 
   if (loading) {
@@ -97,7 +101,7 @@ function DashboardPage() {
               Your deployed sites, generations and analytics — in one place.
             </p>
           </div>
-          <button className="inline-flex items-center gap-2 rounded-md bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:bg-foreground/90 transition">
+          <button onClick={() => navigate({ to: "/questionnaire" })} className="inline-flex items-center gap-2 rounded-md border border-accent/70 bg-foreground text-background px-4 py-2.5 text-sm font-semibold hover:bg-foreground/90 transition">
             <Plus className="h-4 w-4" />
             new site
           </button>
