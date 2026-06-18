@@ -46,18 +46,14 @@ function Index() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background text-foreground font-mono">
-      <NavBar
-        items={navItems}
-        trailing={
-          <a
-            href="/dashboard"
-            aria-label="Open dashboard"
-            className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-foreground/80 backdrop-blur-lg shadow-lg transition hover:border-accent/60 hover:text-foreground"
-          >
-            <LayoutDashboard className="h-4 w-4" />
-          </a>
-        }
-      />
+      <NavBar items={navItems} />
+      <a
+        href="/dashboard"
+        aria-label="Open dashboard"
+        className="fixed right-6 top-6 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/60 text-foreground/80 backdrop-blur-lg shadow-lg transition hover:border-accent/60 hover:text-foreground"
+      >
+        <LayoutDashboard className="h-4 w-4" />
+      </a>
       <PixelHero
         onPrimaryClick={() => navigate({ to: "/questionnaire" })}
         onSecondaryClick={() => {
