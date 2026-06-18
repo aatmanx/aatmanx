@@ -181,7 +181,7 @@ export function PixelHero({
     div.className = "text-foreground";
     const fg = getComputedStyle(div).color;
     document.body.removeChild(div);
-    setThemeColors([muted, muted, muted, muted, fg]);
+    setThemeColors([muted, muted, muted, "oklch(0.55 0.24 279)", fg]);
   }, []);
 
   const marquee = [...clients, ...clients];
@@ -212,7 +212,7 @@ export function PixelHero({
 
       {/* Eyebrow */}
       <div className="relative z-10 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 backdrop-blur px-4 py-1.5 text-[11px] text-muted-foreground">
-        <span className="h-1.5 w-1.5 rounded-full bg-foreground animate-pulse" />
+        <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_18px_var(--color-accent)]" />
         {eyebrow}
       </div>
 
@@ -232,8 +232,8 @@ export function PixelHero({
         <button
           onClick={onPrimaryClick}
           className={cn(
-            "group inline-flex items-center gap-2 rounded-md bg-foreground text-background px-6 py-3 text-sm font-semibold",
-            "hover:bg-foreground/90 transition shadow-[0_0_40px_-10px_oklch(0.96_0_0/0.4)]",
+            "group inline-flex items-center gap-2 rounded-md border border-accent/70 bg-foreground text-background px-6 py-3 text-sm font-semibold",
+            "hover:bg-foreground/90 transition shadow-[0_0_40px_-16px_var(--color-accent)]",
           )}
         >
           $ {primaryCta}
@@ -241,7 +241,7 @@ export function PixelHero({
         </button>
         <button
           onClick={onSecondaryClick}
-          className="inline-flex items-center gap-2 rounded-md border border-border bg-card/40 backdrop-blur px-6 py-3 text-sm font-semibold text-foreground hover:bg-card transition"
+          className="inline-flex items-center gap-2 rounded-md border border-accent/40 bg-card/40 backdrop-blur px-6 py-3 text-sm font-semibold text-foreground hover:bg-card transition"
         >
           <Terminal className="h-4 w-4" />
           {secondaryCta}
