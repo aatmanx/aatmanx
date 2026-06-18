@@ -401,6 +401,7 @@ const tiers = [
 ];
 
 function Pricing() {
+  const navigate = useNavigate();
   return (
     <section id="pricing" className="relative px-6 py-32 border-t border-border">
       <div className="max-w-6xl mx-auto">
