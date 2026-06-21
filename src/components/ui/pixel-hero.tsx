@@ -160,12 +160,10 @@ interface PixelHeroProps {
 }
 
 export function PixelHero({
-  eyebrow = "// for businesses, not hobbyists",
-  word1 = "websites",
-  word2 = "engineered.",
-  description = "aatman generates production-grade websites for businesses from a structured intake. SEO, performance and conversion — wired up by default.",
-  primaryCta = "start a build",
-  secondaryCta = "see how it works",
+  eyebrow = "// ai website builder for businesses",
+  description = "Skip expensive agencies, endless revisions, and long development timelines. Create a professional website tailored to your business in minutes using AI.",
+  primaryCta = "Build My Website",
+  secondaryCta = "See How It Works",
   onPrimaryClick,
   onSecondaryClick,
   clients = ["NORTHWIND", "ACME LABS", "MERIDIAN", "ATLAS CO.", "FOUNDRY", "HELIOS", "QUANTA", "VOLTAGE"],
@@ -180,14 +178,19 @@ export function PixelHero({
     const muted = getComputedStyle(div).color;
     div.className = "text-foreground";
     const fg = getComputedStyle(div).color;
+    div.className = "text-accent";
+    const accent = getComputedStyle(div).color;
     document.body.removeChild(div);
-    setThemeColors([muted, muted, muted, "oklch(0.55 0.24 279)", fg]);
+    setThemeColors([muted, muted, muted, accent, fg]);
   }, []);
 
   const marquee = [...clients, ...clients];
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center px-6 pt-28 pb-16">
+    <section
+      id="home"
+      className="relative w-full overflow-hidden flex flex-col items-center justify-center px-6 pt-24 pb-10 min-h-[100svh]"
+    >
       <style>{`
         @keyframes aatmanMarquee { 0% { transform: translateX(0%);} 100% { transform: translateX(-50%);} }
         .aatman-marquee { animation: aatmanMarquee 35s linear infinite; }
@@ -211,52 +214,49 @@ export function PixelHero({
       </div>
 
       {/* Eyebrow */}
-      <div className="relative z-10 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 backdrop-blur px-4 py-1.5 text-[11px] text-muted-foreground">
-        <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_18px_var(--color-accent)]" />
+      <div className="relative z-10 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-card/60 backdrop-blur px-4 py-1.5 text-[11px] text-muted-foreground shadow-[0_0_20px_-6px_var(--color-accent)]">
+        <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_16px_var(--color-accent)]" />
         {eyebrow}
       </div>
 
       {/* Headline */}
-      <h1 className="relative z-10 mt-8 text-center text-6xl sm:text-7xl md:text-8xl lg:text-[9rem] font-bold tracking-tighter leading-[0.9]">
-        <span className="aatman-glass-text block">{word1}</span>
-        <span className="aatman-glass-text block">{word2}</span>
+      <h1 className="relative z-10 mt-6 text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.02] max-w-5xl">
+        <span className="aatman-glass-text block">Professional Websites.</span>
+        <span className="aatman-glass-text block">Built in Minutes.</span>
       </h1>
 
       {/* Description */}
-      <p className="relative z-10 mt-8 max-w-xl text-center text-sm sm:text-base text-muted-foreground leading-relaxed">
+      <p className="relative z-10 mt-5 max-w-2xl text-center text-sm sm:text-base text-muted-foreground leading-relaxed">
         {description}
       </p>
 
       {/* CTAs */}
-      <div className="relative z-10 mt-10 flex flex-wrap items-center justify-center gap-3">
+      <div className="relative z-10 mt-7 flex flex-wrap items-center justify-center gap-3">
         <button
           onClick={onPrimaryClick}
           className={cn(
             "group inline-flex items-center gap-2 rounded-md border border-accent/70 bg-foreground text-background px-6 py-3 text-sm font-semibold",
-            "hover:bg-foreground/90 transition shadow-[0_0_40px_-16px_var(--color-accent)]",
+            "hover:bg-foreground/90 transition shadow-[0_0_36px_-10px_var(--color-accent)]",
           )}
         >
-          $ {primaryCta}
+          {primaryCta}
           <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
         </button>
         <button
           onClick={onSecondaryClick}
-          className="inline-flex items-center gap-2 rounded-md border border-accent/40 bg-card/40 backdrop-blur px-6 py-3 text-sm font-semibold text-foreground hover:bg-card transition"
+          className="inline-flex items-center gap-2 rounded-md border border-border bg-card/40 backdrop-blur px-6 py-3 text-sm font-semibold text-foreground hover:bg-card hover:border-accent/40 transition"
         >
           <Terminal className="h-4 w-4" />
           {secondaryCta}
         </button>
       </div>
 
-      {/* Trust marquee */}
-      <div className="relative z-10 mt-16 w-full max-w-5xl">
-        <p className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70 mb-5">
-          trusted by operators at
-        </p>
+      {/* Trust marquee — directly under CTAs, no label */}
+      <div className="relative z-10 mt-10 w-full max-w-5xl">
         <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <div className="flex w-max aatman-marquee gap-12">
             {marquee.map((c, i) => (
-              <span key={i} className="text-xs tracking-[0.25em] text-muted-foreground/80 whitespace-nowrap">
+              <span key={i} className="text-xs tracking-[0.25em] text-muted-foreground/70 whitespace-nowrap">
                 {c}
               </span>
             ))}
