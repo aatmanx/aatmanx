@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      businesses: {
+        Row: {
+          address: string | null
+          business_name: string
+          category: string
+          created_at: string
+          description: string | null
+          domain_preference: string | null
+          email: string | null
+          id: string
+          phone: string | null
+          social_links: Json
+          tagline: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          category: string
+          created_at?: string
+          description?: string | null
+          domain_preference?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          social_links?: Json
+          tagline?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          domain_preference?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          social_links?: Json
+          tagline?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       questionnaire_responses: {
         Row: {
           answer: Json
@@ -52,6 +100,110 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      questionnaire_submissions: {
+        Row: {
+          ai_analysis: Json
+          answers_json: Json
+          business_id: string | null
+          business_profile: Json
+          category: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          session_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: Json
+          answers_json?: Json
+          business_id?: string | null
+          business_profile?: Json
+          category: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          session_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: Json
+          answers_json?: Json
+          business_id?: string | null
+          business_profile?: Json
+          category?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          session_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questionnaire_submissions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      websites: {
+        Row: {
+          business_id: string | null
+          created_at: string
+          id: string
+          slug: string | null
+          status: string
+          submission_id: string | null
+          updated_at: string
+          user_id: string
+          website_json: Json
+        }
+        Insert: {
+          business_id?: string | null
+          created_at?: string
+          id?: string
+          slug?: string | null
+          status?: string
+          submission_id?: string | null
+          updated_at?: string
+          user_id: string
+          website_json?: Json
+        }
+        Update: {
+          business_id?: string | null
+          created_at?: string
+          id?: string
+          slug?: string | null
+          status?: string
+          submission_id?: string | null
+          updated_at?: string
+          user_id?: string
+          website_json?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "websites_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "websites_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "questionnaire_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
