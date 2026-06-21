@@ -52,8 +52,11 @@
   --secondary-foreground: oklch(0.96 0 0);
   --muted: oklch(0.24 0 0);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.55 0.24 279);
-  --accent-foreground: oklch(0.98 0 0);
+  /* Sky blue #87CEEB */
+  --accent: oklch(0.84 0.0789 226.66);
+  --accent-foreground: oklch(0.15 0 0);
+  --accent-glow: 0 0 18px color-mix(in oklab, var(--accent) 55%, transparent),
+                 0 0 42px color-mix(in oklab, var(--accent) 22%, transparent);
   --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.27 0 0);
