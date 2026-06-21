@@ -18,7 +18,7 @@ export function CategorySelect({ categories, selected, onSelect }: Props) {
       </p>
       <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((cat) => {
-          const Icon = (Icons as Record<string, React.ComponentType<{ className?: string }>>)[cat.icon] ?? Icons.Building2;
+          const Icon = ((Icons as unknown) as Record<string, React.ComponentType<{ className?: string }>>)[cat.icon] ?? Icons.Building2;
           const isSelected = selected === cat.id;
           return (
             <button
