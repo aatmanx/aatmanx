@@ -38,9 +38,9 @@
 
 :root {
   --radius: 0.5rem;
-  /* Dark monochrome tech palette — grayscale white/black */
+  /* Pitch-black palette — pure black background, monochrome surfaces */
   --void: oklch(0 0 0);
-  --background: oklch(0.13 0 0);
+  --background: oklch(0 0 0);
   --foreground: oklch(0.96 0 0);
   --card: oklch(0.17 0 0);
   --card-foreground: oklch(0.96 0 0);
