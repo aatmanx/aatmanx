@@ -583,21 +583,183 @@ function Resources() {
 
 /* ───────────────────── FOOTER ───────────────────── */
 function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-border px-6 py-12 pb-28 sm:pb-12">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-foreground" />
-          <span className="text-foreground font-semibold">aatman</span>
-          <span>— websites for businesses, engineered.</span>
+    <footer
+      id="contact"
+      className="relative border-t border-border bg-background overflow-hidden"
+    >
+      {/* Top grid lines decoration */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, var(--color-foreground) 1px, transparent 1px), linear-gradient(to bottom, var(--color-foreground) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[80%] -translate-x-1/2 bg-accent/10 blur-[120px]"
+      />
+
+      <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-12">
+        {/* CTA strip */}
+        <div className="rounded-2xl border border-border bg-card/40 backdrop-blur p-8 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <div className="text-[11px] uppercase tracking-[0.25em] text-accent mb-3">
+              // build with aatman
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tighter text-foreground">
+              Ready to ship your business online?
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground max-w-md">
+              From intake to a deployed, branded website — in minutes, not months.
+            </p>
+          </div>
+          <Link
+            to="/questionnaire"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/70 bg-foreground px-6 py-3 text-sm font-semibold text-background hover:bg-foreground/90 transition shadow-[0_0_36px_-10px_var(--color-accent)] shrink-0"
+          >
+            Start your build
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-        <div className="flex items-center gap-6">
-          <a href="#" className="hover:text-foreground transition">privacy</a>
-          <a href="#" className="hover:text-foreground transition">terms</a>
-          <a href="#" className="hover:text-foreground transition">contact</a>
+
+        {/* Main grid */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-12 gap-10">
+          {/* Brand column */}
+          <div className="col-span-2 md:col-span-5">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card/60">
+                <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_var(--color-accent)]" />
+              </span>
+              <span className="text-base font-semibold tracking-tight text-foreground">
+                aatman
+              </span>
+            </Link>
+            <p className="mt-5 max-w-sm text-sm text-muted-foreground leading-relaxed">
+              The AI website engine for B2B operators. Structured intake, brand-grade output,
+              production deploys — without the agency overhead.
+            </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1.5 text-[11px] text-muted-foreground">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-60 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
+              All systems operational
+            </div>
+          </div>
+
+          {/* Product */}
+          <FooterCol
+            title="Product"
+            links={[
+              { l: "How it works", href: "#how" },
+              { l: "Pricing", href: "#pricing" },
+              { l: "Resources", href: "#resources" },
+              { l: "Dashboard", href: "/dashboard" },
+            ]}
+          />
+          {/* Company */}
+          <FooterCol
+            title="Company"
+            links={[
+              { l: "About", href: "#" },
+              { l: "Customers", href: "#" },
+              { l: "Changelog", href: "#" },
+              { l: "Status", href: "#" },
+            ]}
+          />
+          {/* Legal */}
+          <FooterCol
+            title="Legal"
+            links={[
+              { l: "Privacy", href: "#" },
+              { l: "Terms", href: "#" },
+              { l: "Security", href: "#" },
+              { l: "DPA", href: "#" },
+            ]}
+          />
+        </div>
+
+        {/* Contact strip */}
+        <div className="mt-16 grid sm:grid-cols-3 gap-4">
+          <a
+            href="mailto:aatmanxcares@gmail.com"
+            className="group rounded-xl border border-border bg-card/30 px-5 py-4 hover:border-accent/40 transition"
+          >
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Mail className="h-3 w-3 text-accent" /> Email
+            </div>
+            <div className="mt-1.5 text-sm text-foreground group-hover:text-accent transition">
+              aatmanxcares@gmail.com
+            </div>
+          </a>
+          <a
+            href="tel:+919880291310"
+            className="group rounded-xl border border-border bg-card/30 px-5 py-4 hover:border-accent/40 transition"
+          >
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Phone className="h-3 w-3 text-accent" /> Phone / WhatsApp
+            </div>
+            <div className="mt-1.5 text-sm text-foreground group-hover:text-accent transition">
+              +91 98802 91310
+            </div>
+          </a>
+          <div className="rounded-xl border border-border bg-card/30 px-5 py-4">
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+              <MapPin className="h-3 w-3 text-accent" /> Office
+            </div>
+            <div className="mt-1.5 text-sm text-foreground">Bangalore, Karnataka</div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-border pt-8 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-3">
+            <span>© {year} aatman — websites for businesses, engineered.</span>
+          </div>
+          <div className="flex items-center gap-4 font-mono tabular-nums">
+            <span>v1.0.0</span>
+            <span className="h-1 w-1 rounded-full bg-border" />
+            <span>built in bangalore</span>
+            <span className="h-1 w-1 rounded-full bg-border" />
+            <span className="text-accent">● live</span>
+          </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterCol({
+  title,
+  links,
+}: {
+  title: string;
+  links: { l: string; href: string }[];
+}) {
+  return (
+    <div className="col-span-1 md:col-span-2">
+      <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+        {title}
+      </div>
+      <ul className="mt-5 space-y-3">
+        {links.map((i) => (
+          <li key={i.l}>
+            <a
+              href={i.href}
+              className="text-sm text-foreground/80 hover:text-accent transition"
+            >
+              {i.l}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
