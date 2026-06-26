@@ -150,13 +150,20 @@ function QuestionnairePage() {
       setState(completedState);
       saveState(completedState);
 
-      try {
-        await persistAnswer(completedState);
-      } catch {
-        /* local state is saved — completion page can retry DB persist */
-      }
+      // Best-effort sync, but never block navigation on it.
+      const sessionPromise = supabase.auth.getSession();
+      sessionPromise
+        .then(({ data }) => {
+          if (data.session?.user) {
+            return syncQuestionnaireToDatabase(completedState, data.session.user.id).catch(() => undefined);
+          }
+          return undefined;
+        })
+        .catch(() => undefined);
 
-      navigate({ to: "/questionnaire/complete" });
+      // Send straight to signup — answers persist via localStorage and
+      // are written to the DB after account creation.
+      navigate({ to: "/signup", search: { next: "/dashboard" } });
       return;
     }
 
