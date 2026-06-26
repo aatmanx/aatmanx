@@ -13,6 +13,13 @@ import {
   TrendingUp,
   Clock,
   IndianRupee,
+  Menu,
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Twitter,
+  Linkedin,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
