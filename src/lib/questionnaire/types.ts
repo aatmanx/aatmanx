@@ -91,7 +91,7 @@ export type RealEstateWebsiteProfile = {
   propertyTypes: string[];
   sellRent: string;
   contactMethods: string[];
-  bookSiteVisits: string;
+  bookSiteVisits: boolean;
   siteVisitAvailability?: string;
   showcaseTeam: string;
   teamMembers?: TeamMember[];
