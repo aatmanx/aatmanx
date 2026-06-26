@@ -53,15 +53,16 @@ export function derivePipelineStage(
     return "processing";
   }
 
-  const aiStatus = questionnaire.ai_generation_status ?? {};
+  const aiStatus = (questionnaire.ai_generation_status ?? {}) as Record<string, string>;
   const aiActive = Object.values(aiStatus).some((s) => s === "pending" || s === "processing");
   if (aiActive) {
     return "ai_generation";
   }
 
+  const templateSelection = questionnaire.template_selection as Record<string, unknown> | null | undefined;
   const hasTemplateSelection =
-    questionnaire.template_selection &&
-    Object.keys(questionnaire.template_selection).length > 0 &&
+    templateSelection &&
+    Object.keys(templateSelection).length > 0 &&
     questionnaire.status !== "generated";
 
   if (hasTemplateSelection && website?.status === "draft") {
