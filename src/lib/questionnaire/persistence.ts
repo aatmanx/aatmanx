@@ -224,7 +224,7 @@ export async function hasUserCompletedQuestionnaire(userId: string): Promise<boo
     .from("questionnaires")
     .select("id", { count: "exact", head: true })
     .eq("user_id", userId)
-    .eq("status", "completed");
+    .in("status", ["completed", "processing", "generated"]);
   if (error) throw error;
   return (count ?? 0) > 0;
 }
@@ -234,8 +234,8 @@ export async function getLatestCompletedQuestionnaire(userId: string) {
     .from("questionnaires")
     .select("*")
     .eq("user_id", userId)
-    .eq("status", "completed")
-    .order("completed_at", { ascending: false })
+    .in("status", ["completed", "processing", "generated"])
+    .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();
   if (error) throw error;

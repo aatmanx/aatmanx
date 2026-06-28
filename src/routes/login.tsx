@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { getSafeNextPath } from "@/lib/auth/guards";
+import { getSafeNextPath, waitForAuthSession } from "@/lib/auth/guards";
 import { persistOnboardingToDatabase } from "@/lib/auth/persist-onboarding";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
@@ -34,18 +34,30 @@ function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (signInError) throw signInError;
-      const { data } = await supabase.auth.getSession();
-      let redirectPath = nextPath;
-      if (data.session) {
-        try {
-          const persistResult = await persistOnboardingToDatabase(data.session.user.id);
-          if (persistResult) redirectPath = "/dashboard";
-        } catch {
-          /* may not have onboarding state */
-        }
+
+      const session = signInData.session;
+      if (!session) {
+        const ready = await waitForAuthSession();
+        if (!ready) throw new Error("Sign-in succeeded but session was not established. Please try again.");
       }
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const activeSession = sessionData.session ?? signInData.session;
+      if (!activeSession) throw new Error("Unable to establish session after sign-in.");
+
+      let redirectPath = nextPath;
+      try {
+        const persistResult = await persistOnboardingToDatabase(activeSession.user.id);
+        if (persistResult) redirectPath = "/dashboard";
+      } catch {
+        /* may not have onboarding state */
+      }
+
       navigate({ href: redirectPath, replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in");

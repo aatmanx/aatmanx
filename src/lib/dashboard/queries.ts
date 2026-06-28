@@ -1,8 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
-import { getLatestCompletedQuestionnaire } from "@/lib/questionnaire/persistence";
+import { getLatestQuestionnaireForUser } from "@/lib/questionnaire/persistence";
+import { isQuestionnaireFinished } from "@/lib/questionnaire/profile-adapter";
 
 export type DashboardData = {
-  questionnaire: Awaited<ReturnType<typeof getLatestCompletedQuestionnaire>>;
+  questionnaire: Awaited<ReturnType<typeof getLatestQuestionnaireForUser>>;
   website: Awaited<ReturnType<typeof getPrimaryWebsite>> | null;
   business: { business_name?: string; category?: string; description?: string; address?: string } | null;
 };
@@ -20,9 +21,23 @@ export async function getPrimaryWebsite(userId: string) {
 }
 
 export async function getDashboardData(userId: string): Promise<DashboardData> {
-  const questionnaire = await getLatestCompletedQuestionnaire(userId);
+  const questionnaire = await getLatestQuestionnaireForUser(userId);
   const website = await getPrimaryWebsite(userId);
   const business = website?.businesses as DashboardData["business"];
 
   return { questionnaire, website, business };
+}
+
+export function isDashboardQuestionnaireComplete(data: DashboardData): boolean {
+  return isQuestionnaireFinished(data.questionnaire?.status ?? null);
+}
+
+export function shouldPollDashboard(data: DashboardData | undefined): boolean {
+  if (!data) return false;
+  const websiteStatus = data.website?.status;
+  const questionnaireStatus = data.questionnaire?.status;
+  if (websiteStatus === "generating") return true;
+  if (questionnaireStatus === "processing") return true;
+  if (questionnaireStatus === "completed" && websiteStatus === "draft") return true;
+  return false;
 }

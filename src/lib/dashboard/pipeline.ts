@@ -62,8 +62,7 @@ export function derivePipelineStage(
   const templateSelection = questionnaire.template_selection as Record<string, unknown> | null | undefined;
   const hasTemplateSelection =
     templateSelection &&
-    Object.keys(templateSelection).length > 0 &&
-    questionnaire.status !== "generated";
+    Object.keys(templateSelection).length > 0;
 
   if (hasTemplateSelection && website?.status === "draft") {
     return "template_selection";

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { AuthShell } from "./login";
-import { getSafeNextPath } from "@/lib/auth/guards";
+import { getSafeNextPath, waitForAuthSession } from "@/lib/auth/guards";
 import { persistOnboardingToDatabase } from "@/lib/auth/persist-onboarding";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
@@ -53,6 +53,13 @@ function SignupPage() {
         });
         if (signInError) throw signInError;
         session = signInData.session;
+      }
+
+      if (!session) {
+        const ready = await waitForAuthSession();
+        if (!ready) throw new Error("Account created but session was not established. Please sign in.");
+        const { data: retry } = await supabase.auth.getSession();
+        session = retry.session;
       }
 
       if (session) {

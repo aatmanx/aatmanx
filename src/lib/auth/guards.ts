@@ -18,37 +18,40 @@ export function useRequireAuth(options: AuthGuardOptions = {}) {
   useEffect(() => {
     let mounted = true;
 
-    const check = async () => {
-      const { data } = await supabase.auth.getSession();
+    const applySession = (session: Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]) => {
       if (!mounted) return;
 
-      if (!data.session) {
-        navigate({ href: `${redirectTo}?next=${encodeURIComponent(window.location.pathname)}`, replace: true });
+      if (!session) {
+        const next = encodeURIComponent(window.location.pathname + window.location.search);
+        navigate({ href: `${redirectTo}?next=${next}`, replace: true });
         return;
       }
 
-      const verified = Boolean(data.session.user.email_confirmed_at);
+      const verified = Boolean(session.user.email_confirmed_at);
       if (requireVerified && !verified) {
-        navigate({ href: `/verify-email?next=${encodeURIComponent(window.location.pathname)}`, replace: true });
+        const next = encodeURIComponent(window.location.pathname + window.location.search);
+        navigate({ href: `/verify-email?next=${next}`, replace: true });
         return;
       }
 
-      setUserId(data.session.user.id);
-      setEmail(data.session.user.email ?? null);
+      setUserId(session.user.id);
+      setEmail(session.user.email ?? null);
       setEmailVerified(verified);
       setLoading(false);
     };
 
-    check();
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        applySession(session);
+      } else if (event === "SIGNED_OUT") {
+        if (!mounted) return;
         navigate({ href: redirectTo, replace: true });
-      } else {
-        setUserId(session.user.id);
-        setEmail(session.user.email ?? null);
-        setEmailVerified(Boolean(session.user.email_confirmed_at));
-        setLoading(false);
+      }
+    });
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (mounted && data.session) {
+        applySession(data.session);
       }
     });
 
@@ -70,4 +73,24 @@ export function getSafeNextPath(defaultPath = "/dashboard"): string {
 export async function isEmailVerified(): Promise<boolean> {
   const { data } = await supabase.auth.getSession();
   return Boolean(data.session?.user.email_confirmed_at);
+}
+
+export async function waitForAuthSession(timeoutMs = 5000): Promise<boolean> {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) return true;
+
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      sub.subscription.unsubscribe();
+      resolve(false);
+    }, timeoutMs);
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if ((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session) {
+        clearTimeout(timer);
+        sub.subscription.unsubscribe();
+        resolve(true);
+      }
+    });
+  });
 }

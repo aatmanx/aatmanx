@@ -18,7 +18,7 @@ import {
   saveState,
   setupLeaveGuard,
 } from "@/lib/questionnaire/storage";
-import { resolveQuestionnaireInit } from "@/lib/questionnaire/auth-sync";
+import { resolveQuestionnaireInit, finalizeQuestionnaireForUser } from "@/lib/questionnaire/auth-sync";
 import { syncQuestionnaireToDatabase } from "@/lib/questionnaire/persistence";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -167,21 +167,21 @@ function QuestionnairePage() {
       setCompleting(true);
       const completedState: QuestionnaireState = { ...state, status: "completed" };
       setState(completedState);
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const uid = sessionData.session?.user.id ?? userId;
+
+      if (uid) {
+        try {
+          await finalizeQuestionnaireForUser(uid, completedState);
+          navigate({ to: "/dashboard", replace: true });
+          return;
+        } catch {
+          /* fall through to anonymous flow */
+        }
+      }
+
       saveState(completedState);
-
-      // Best-effort sync, but never block navigation on it.
-      const sessionPromise = supabase.auth.getSession();
-      sessionPromise
-        .then(({ data }) => {
-          if (data.session?.user) {
-            return syncQuestionnaireToDatabase(completedState, data.session.user.id).catch(() => undefined);
-          }
-          return undefined;
-        })
-        .catch(() => undefined);
-
-      // Send straight to signup — answers persist via localStorage and
-      // are written to the DB after account creation.
       navigate({ to: "/signup", search: { next: "/dashboard" } });
       return;
     }

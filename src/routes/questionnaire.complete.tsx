@@ -6,7 +6,7 @@ import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 import { completeQuestionnaire, hasUserCompletedQuestionnaire } from "@/lib/questionnaire/persistence";
 import { generateWebsiteProfileJson } from "@/lib/questionnaire/json-generator";
 import { clearState, loadState } from "@/lib/questionnaire/storage";
-import { loadQuestionnaireFromDatabase } from "@/lib/questionnaire/auth-sync";
+import { loadQuestionnaireFromDatabase, ensureWebsitePipeline } from "@/lib/questionnaire/auth-sync";
 
 export const Route = createFileRoute("/questionnaire/complete")({
   head: () => ({
@@ -62,6 +62,7 @@ function CompletePage() {
         try {
           const completedState = { ...state, status: "completed" as const };
           await completeQuestionnaire(completedState, userId);
+          await ensureWebsitePipeline(userId);
           clearState();
           navigate({ to: "/dashboard", replace: true });
           return;

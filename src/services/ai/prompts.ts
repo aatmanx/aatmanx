@@ -12,13 +12,18 @@ export function buildTaskPrompt(
   profile: RealEstateWebsiteProfile,
   context?: Record<string, unknown>,
 ): string {
+  const location = profile.primaryLocation ?? "";
+  const description = profile.content?.businessDescription ?? "";
   const base = `Business: ${profile.businessName}
 Type: ${profile.businessType}
-Location: ${profile.location?.city ?? profile.location?.primary ?? ""}
-Description: ${profile.description ?? ""}
+Location: ${location}
+Description: ${description}
+Differentiator: ${profile.content?.differentiator ?? ""}
 Services: ${(profile.services ?? []).join(", ")}
+Property types: ${(profile.propertyTypes ?? []).join(", ")}
 Website goal: ${profile.websiteGoal ?? ""}
-Style: ${profile.branding?.websiteStyle ?? ""}`;
+Style: ${profile.branding?.websiteStyle ?? ""}
+Color style: ${profile.branding?.colorStyle ?? ""}`;
 
   const taskPrompts: Record<AiGenerationTask, string> = {
     homepage_content: `${base}

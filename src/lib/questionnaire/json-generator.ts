@@ -71,6 +71,9 @@ export function generateWebsiteProfileJson(state: QuestionnaireState): RealEstat
       methods: asStringArray(answers.contact_methods),
       bookSiteVisits,
       siteVisitAvailability: bookSiteVisits ? asString(answers.site_visit_availability) : undefined,
+      email: asString(answers.contact_email),
+      phone: asString(answers.contact_phone),
+      address: asString(answers.primary_location),
     },
     metadata: {
       sessionId: state.sessionId,

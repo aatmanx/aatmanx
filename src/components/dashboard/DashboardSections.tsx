@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles } from "lucide-react";
 import type { DashboardData } from "@/lib/dashboard/queries";
+import { isDashboardQuestionnaireComplete } from "@/lib/dashboard/queries";
 import { derivePipelineStage, getStageIndex, PIPELINE_STAGES } from "@/lib/dashboard/pipeline";
 
 type Props = {
@@ -31,7 +32,7 @@ export function WelcomeCard({ email, data }: Props) {
               : "No questionnaire found. Start the questionnaire to build your real estate website."}
           </p>
         </div>
-        {!data.questionnaire && (
+        {!isDashboardQuestionnaireComplete(data) && (
           <Link
             to="/questionnaire"
             className="inline-flex shrink-0 items-center gap-2 rounded-md border border-accent/70 bg-foreground px-5 py-2.5 text-sm font-semibold text-background hover:bg-foreground/90 transition"
@@ -89,13 +90,13 @@ export function WebsiteStatusBadge({ data }: { data: DashboardData }) {
   const meta = PIPELINE_STAGES.find((s) => s.id === stage);
 
   const colorMap: Record<string, string> = {
-    draft: "bg-muted text-muted-foreground",
-    completed: "bg-blue-500/15 text-blue-400",
-    processing: "bg-amber-500/15 text-amber-400",
-    ai_generation: "bg-purple-500/15 text-purple-400",
-    template_selection: "bg-cyan-500/15 text-cyan-400",
-    website_building: "bg-orange-500/15 text-orange-400",
-    website_ready: "bg-accent/15 text-accent",
+    draft: "bg-white/10 text-white/50",
+    completed: "bg-blue-500/15 text-blue-300",
+    processing: "bg-amber-500/15 text-amber-300",
+    ai_generation: "bg-purple-500/15 text-purple-300",
+    template_selection: "bg-cyan-500/15 text-cyan-300",
+    website_building: "bg-orange-500/15 text-orange-300",
+    website_ready: "bg-[#4DA3FF]/15 text-[#4DA3FF]",
   };
 
   return (

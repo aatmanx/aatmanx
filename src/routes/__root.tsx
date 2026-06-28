@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
-import { syncAuthenticatedDraft } from "@/lib/questionnaire/auth-sync";
+import { syncAuthenticatedDraft, ensureWebsitePipeline } from "@/lib/questionnaire/auth-sync";
 
 function NotFoundComponent() {
   return (
@@ -122,6 +122,7 @@ function RootComponent() {
     const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session?.user.id) {
         await syncAuthenticatedDraft(session.user.id);
+        await ensureWebsitePipeline(session.user.id);
       }
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();

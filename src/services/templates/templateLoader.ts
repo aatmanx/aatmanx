@@ -1,3 +1,5 @@
+import type { RealEstateWebsiteProfile } from "@/lib/questionnaire/types";
+import { hydrateSiteContent } from "@/lib/templates/hydrateSiteContent";
 import type { TemplateManifest } from "./templateMetadata";
 import { getTemplateById } from "./templateRegistry";
 
@@ -127,15 +129,22 @@ export async function hydrateTemplate(
   templateId: string,
   profile: Record<string, unknown>,
   generatedContent: Record<string, unknown>,
-): Promise<TemplateLoadResult | null> {
+): Promise<(TemplateLoadResult & { siteContent?: ReturnType<typeof hydrateSiteContent> }) | null> {
   const loaded = await loadTemplate(templateId);
   if (!loaded) return null;
 
+  const siteContent = hydrateSiteContent(
+    profile as RealEstateWebsiteProfile,
+    generatedContent,
+  );
+
   return {
     ...loaded,
+    siteContent,
     sampleData: {
       profile,
       aiContent: generatedContent,
+      siteContent,
       hydratedAt: new Date().toISOString(),
     },
   };

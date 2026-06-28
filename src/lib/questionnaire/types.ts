@@ -114,6 +114,9 @@ export type RealEstateWebsiteProfile = {
     methods: string[];
     bookSiteVisits: boolean;
     siteVisitAvailability?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
   };
   metadata: {
     sessionId: string;
